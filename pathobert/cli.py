@@ -29,9 +29,14 @@ from .model import load_model
 from .inference import predict
 from .analysis import analyze_predictions
 
-save_dir = "./tokenized"
-os.makedirs(save_dir, exist_ok=True)
+#save_dir = "./tokenized"
+#os.makedirs(save_dir, exist_ok=True)
 
+OUTPUT_DIR = "./output"
+TOKEN_DIR = os.path.join(OUTPUT_DIR, "tokenized")
+
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(TOKEN_DIR, exist_ok=True)
 
 def build_parser():
     parser = argparse.ArgumentParser(
@@ -107,8 +112,8 @@ def main():
         f"{input_ids_array.shape}"
     )
     # Save
-    np.save(os.path.join(save_dir, "input_ids.npy"), input_ids_array)
-    np.save(os.path.join(save_dir, "attention_mask.npy"), attention_mask_array)
+    np.save(os.path.join(TOKEN_DIR, "input_ids.npy"), input_ids_array)
+    np.save(os.path.join(TOKEN_DIR, "attention_mask.npy"), attention_mask_array)
     del input_ids_array, attention_mask_array
 
     
@@ -140,13 +145,33 @@ def main():
         batch_size=args.batch_size,
         device=device,
     )
+    if isinstance(probs, list):
+       probs = torch.cat(probs).numpy()
+    elif isinstance(probs, torch.Tensor):
+       probs = probs.cpu().numpy()
+
+    torch.save(torch.tensor(probs), os.path.join(OUTPUT_DIR, "probs.pt"))
+    print("💾 Saving probs...")
 
     print("📊 Analyzing predictions...")
-    analyze_predictions(
+    stats = analyze_predictions(
         probs,
         threshold=args.threshold,
         show_plot=not args.no_plot,
     )
+    torch.save(stats, os.path.join(OUTPUT_DIR, "stats.pt"))
+    print("💾 Saving results...")
+    output_file = os.path.join(OUTPUT_DIR,args.out)
+
+    with open(output_file, "w") as f:
+        f.write("sequence\tprobability\tlabel\n")
+
+        for seq, prob in zip(sequences, probs):
+            label = "PATHOGEN" if prob > 0.5 else "NON-PATHOGEN"
+            f.write(f"{seq}\t{prob:.6f}\t{label}\n")
+
+    print(f"✅ Results saved in: {OUTPUT_DIR}")
+    print(f"📄 Prediction file: {output_file}")
 
     print("✅ Finished.")
 

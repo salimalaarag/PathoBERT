@@ -74,25 +74,36 @@ pip install git+https://github.com/salimalaarag/PathoBERT.git
 
 # Download DNABERT
 
-The first run automatically downloads
+DNABERT is required for both tokenization and model inference. The first run requires downloading the complete DNABERT files from Hugging Face, including the tokenizer files and pretrained model weights.
 
-```
-zhihan1996/DNA_bert_6
-```
+### Automatic download (recommended)
 
-from Hugging Face.
+Run the following command once before using PathoBERT:
+
+```bash
+python - <<'PY'
+from huggingface_hub import snapshot_download
+
+path = snapshot_download("zhihan1996/DNA_bert_6")
+print(path)
+PY
+```
+This command downloads the complete DNABERT package from Hugging Face, including:
+config.json
+pytorch_model.bin
+vocab.txt
+tokenizer_config.json
+special_tokens_map.json
+configuration_bert.py
+dnabert_layer.py
+
+The downloaded files are stored automatically in the Hugging Face cache:
+~/.cache/huggingface/hub/
+
+After this step, PathoBERT can load DNABERT locally.
 
 For offline usage:
-
-```python
-from transformers import BertModel
-
-BertModel.from_pretrained(
-    "zhihan1996/DNA_bert_6"
-)
-```
-
-or set
+For offline inference, enable:
 
 ```python
 LOCAL_FILES_ONLY=True
@@ -103,6 +114,14 @@ inside
 ```
 pathobert/config.py
 ```
+Before enabling offline mode, make sure DNABERT has already been downloaded and is available in the local Hugging Face cache.
+
+If LOCAL_FILES_ONLY=True is enabled before downloading DNABERT, PathoBERT will fail during model loading because the tokenizer or pretrained model weights cannot be found.
+To verify that DNABERT is available locally:
+ls ~/.cache/huggingface/hub/
+
+You should find a directory similar to:
+models--zhihan1996--DNA_bert_6
 
 ---
 

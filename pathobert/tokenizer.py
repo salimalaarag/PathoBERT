@@ -31,7 +31,7 @@ from .config import (
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_NAME,
     use_fast=USE_FAST_TOKENIZER,
-    local_files_only=True,
+    local_files_only=False,
 )
 
 # ----------------------------------------------------
