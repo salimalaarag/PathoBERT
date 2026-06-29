@@ -38,8 +38,7 @@ to provide robust pathogenicity prediction from short sequencing reads.
 ## From PyPI
 
 ```bash
-pip install pathobert --no-deps
-pip install -r requirements.txt
+pip install pathobert
 ```
 
 ## From GitHub
@@ -207,11 +206,10 @@ pathobert/
 If you use PathoBERT in your research, please cite:
 
 ```
-Salem A. El-aarag.
+Salem A. El-aarag, Mario Flores, Mohamed E Hasan, Alaa E. Hemeida, and Mahmoud ElHefnawi
 
-PathoBERT:
-Read-Level Bacterial Pathogenicity Prediction Using
-DNABERT, LoRA, CNN, MCBAM and Multi-Scale Convolutional Attention.
+PathoBERT: 
+A Hybrid Attention-Based Genomic Language Model for Read-Level Bacterial Pathogenicity Prediction
 
 (Manuscript in preparation)
 ```
@@ -241,11 +239,9 @@ Users are responsible for validating results before applying them in biological 
 
 ---
 
-# Author
+# Developed by
 
 **Salem A. El-aarag**
-
-Genome Environment and Bioinformatics Research Laboratory (GEBRI)
 
 Email:
 - salem.abdelmonem.stu@gebri.usc.edu.eg
