@@ -239,7 +239,7 @@ Users are responsible for validating results before applying them in biological 
 
 ---
 
-# Developed by
+# Author
 
 **Salem A. El-aarag**
 
