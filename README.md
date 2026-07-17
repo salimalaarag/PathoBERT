@@ -62,7 +62,7 @@ pip install git+https://github.com/salimalaarag/PathoBERT.git
 # Requirements
 
 - Python ≥ 3.10
-- PyTorch ≥ 2.2
+- PyTorch ≥ 2.6
 - transformers
 - peft
 - numpy
@@ -110,19 +110,14 @@ pathobert/config.py
 
 ## Command Line
 
-```bash
-pathobert \
-    --fasta reads.fasta \
-    --checkpoint final_model.pt
-```
-
 Example
 
 ```bash
-pathobert \
-    --fasta ecoli_reads.fasta \
-    --checkpoint final_model.pt \
-    --batch-size 64
+python -m pathobert.cli \
+    --model Model_checkpoint/final_model.pt \
+    --fasta Test_data/Test.fasta \
+    --batch_size 64
+
 ```
 
 ---
