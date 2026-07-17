@@ -38,7 +38,7 @@ os.makedirs(TOKENIZED_DIR, exist_ok=True)
 MODEL_NAME = "zhihan1996/DNA_bert_6"
 
 # If True, load only from the local Hugging Face cache.
-LOCAL_FILES_ONLY = False
+LOCAL_FILES_ONLY = True
 
 # torch.compile() during inference
 USE_TORCH_COMPILE = False

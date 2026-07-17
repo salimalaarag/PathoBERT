@@ -9,7 +9,8 @@
 """
 Command-line interface for PathoBERT.
 """
-
+import os
+import numpy as np
 import argparse
 import torch
 from torch.utils.data import DataLoader
@@ -27,6 +28,9 @@ from .dataset import IterableChunkDataset
 from .model import load_model
 from .inference import predict
 from .analysis import analyze_predictions
+
+save_dir = "./tokenized"
+os.makedirs(save_dir, exist_ok=True)
 
 
 def build_parser():
@@ -92,7 +96,22 @@ def main():
     ids, sequences = read_fasta(args.fasta)
 
     print("🧬 Tokenizing...")
-    tokenize_sequences(sequences)
+    results = tokenize_sequences(sequences)
+    input_ids_list, attention_mask_list = results
+
+    input_ids_array = np.stack(input_ids_list)
+    attention_mask_array = np.stack(attention_mask_list)
+    total_size = input_ids_array.shape[0]
+    print(
+        f"💾 Saved tensors: "
+        f"{input_ids_array.shape}"
+    )
+    # Save
+    np.save(os.path.join(save_dir, "input_ids.npy"), input_ids_array)
+    np.save(os.path.join(save_dir, "attention_mask.npy"), attention_mask_array)
+    del input_ids_array, attention_mask_array
+
+    
 
     dataset = IterableChunkDataset(
         input_ids_path=INPUT_IDS_FILE,
